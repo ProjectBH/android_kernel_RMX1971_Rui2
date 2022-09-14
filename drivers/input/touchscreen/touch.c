@@ -93,8 +93,17 @@ bool __init tp_judge_ic_match(char * tp_ic_name)
 			pr_err("[TP] ERROR! ic is not match driver\n");
 			return false;
 		}
-	case 18621:
-	case 19691:
+	case 19651:
+	case 18041:
+		if(strstr(tp_ic_name, "synaptics-s3706")){
+			pr_err("[TP] Project Name use synaptics\n");
+			is_tp_type_got_in_match = true;
+			return true;
+		}else{
+			pr_err("[TP] Project not synaptics cannot support\n");
+			return false;
+		}
+	default:
 		if(strstr(tp_ic_name, "himax,hx83112a_nf")){
 			pr_err("[TP]Project use himax \n");
 			is_tp_type_got_in_match = true;
@@ -108,24 +117,11 @@ bool __init tp_judge_ic_match(char * tp_ic_name)
 			pr_err("[TP] Project not himax cannot support\n");
 			return false;
 		}
-	case 19651:
-	case 18041:
-		if(strstr(tp_ic_name, "synaptics-s3706")){
-			pr_err("[TP] Project Name use synaptics\n");
-			is_tp_type_got_in_match = true;
-			return true;
-		}else{
-			pr_err("[TP] Project not synaptics cannot support\n");
-			return false;
-		}
-	default:
-		pr_err("Invalid project\n");
-		break;
 	}
 	return true;
 }
 
-#define GET_TP_DEV_NAME(tp_type) ((tp_dev_names[tp_type].type == (tp_type))?tp_dev_names[tp_type].name:"UNMATCH")
+#define GET_TP_DEV_NAME(tp_type) ((tp_dev_names[tp_type].type == (tp_type))?tp_dev_names[tp_type].name:"DSJM")
 bool tp_judge_ic_match_commandline(struct panel_info *panel_data)
 {
     int prj_id = 0;
@@ -212,7 +208,10 @@ int tp_util_get_vendor(struct hw_resource *hw_res, struct panel_info *panel_data
     } else if (is_project(OPPO_18383)) {
         panel_data->tp_type = TP_SAMSUNG;
         prj_id = OPPO_18383;
-	} else if (is_project(OPPO_18621) || is_project(OPPO_19691)) {
+	} else if (is_project(OPPO_19651)) {
+		panel_data->tp_type = TP_SAMSUNG;
+		prj_id = OPPO_19651;
+	} else {
 #ifdef CONFIG_TOUCHPANEL_MULTI_NOFLASH
 		if (g_tp_chip_name != NULL) {
 			panel_data->chip_name = g_tp_chip_name;
@@ -221,12 +220,9 @@ int tp_util_get_vendor(struct hw_resource *hw_res, struct panel_info *panel_data
 		panel_data->tp_type = TP_DSJM;
 		if(is_project(OPPO_18621))
 			prj_id = OPPO_18621;
-		else if (is_project(OPPO_19691))
+		else
 			prj_id = OPPO_19691;
-	} else if (is_project(OPPO_19651)) {
-		panel_data->tp_type = TP_SAMSUNG;
-		prj_id = OPPO_19651;
-	}
+	} 
 	if (panel_data->tp_type == TP_UNKNOWN) {
 		pr_err("[TP]%s type is unknown\n", __func__);
 		return 0;
@@ -250,13 +246,10 @@ int tp_util_get_vendor(struct hw_resource *hw_res, struct panel_info *panel_data
         panel_data->firmware_headfile.firmware_data = FW_18621_HX83112A_NF_DSJM;
         panel_data->firmware_headfile.firmware_size = sizeof(FW_18621_HX83112A_NF_DSJM);
         break;
-	case OPPO_19691:
+	default:
         panel_data->firmware_headfile.firmware_data = FW_19691_HX83112A_NF_DSJM;
         panel_data->firmware_headfile.firmware_size = sizeof(FW_19691_HX83112A_NF_DSJM);
         break;
-	default:
-        panel_data->firmware_headfile.firmware_data = NULL;
-        panel_data->firmware_headfile.firmware_size = 0;
 	}
 
 	panel_data->manufacture_info.fw_path = panel_data->fw_name;
