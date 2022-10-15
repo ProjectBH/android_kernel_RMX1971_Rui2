@@ -363,7 +363,6 @@ struct fastrpc_mmap {
 	bool is_filemap; /*flag to indicate map used in process init*/
 	int secure;
 	uintptr_t attr;
-	bool is_filemap; /*flag to indicate map used in process init*/
 };
 
 enum fastrpc_perfkeys {
@@ -3826,12 +3825,6 @@ static int fastrpc_set_process_info(struct fastrpc_file *fl)
 	int err = 0, buf_size = 0;
 	char strpid[PID_SIZE];
 	char cur_comm[TASK_COMM_LEN];
-<<<<<<< HEAD
-=======
-
-	memcpy(cur_comm, current->comm, TASK_COMM_LEN);
-	cur_comm[TASK_COMM_LEN-1] = '\0';
->>>>>>> a3bc3146f4a3d (Add remaining OEM changes to drivers/)
 
 	memcpy(cur_comm, current->comm, TASK_COMM_LEN);
 	cur_comm[TASK_COMM_LEN-1] = '\0';
