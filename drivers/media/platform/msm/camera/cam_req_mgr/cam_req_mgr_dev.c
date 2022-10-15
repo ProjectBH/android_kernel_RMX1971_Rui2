@@ -176,9 +176,6 @@ static unsigned int cam_req_mgr_poll(struct file *f,
 
 static int cam_req_mgr_close(struct file *filep)
 {
-	struct v4l2_subdev *sd;
-	struct v4l2_fh *vfh = filep->private_data;
-	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
 
 	cam_req_mgr_rwsem_write_op(CAM_SUBDEV_LOCK);
 

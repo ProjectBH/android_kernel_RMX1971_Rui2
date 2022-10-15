@@ -82,8 +82,8 @@ struct cam_jpeg_hw_cfg_req {
 	struct list_head list;
 	struct cam_hw_config_args hw_cfg_args;
 	uint32_t dev_type;
-	uint64_t req_id;
 	uint32_t num_hw_entry_processed;
+	int64_t req_id;
 };
 
 /**
